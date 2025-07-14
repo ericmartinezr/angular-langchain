@@ -1,0 +1,5 @@
+*BKP*
+.env
+*.log
+__pycache__
+.venv
