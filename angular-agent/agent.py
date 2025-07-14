@@ -69,35 +69,19 @@ message = {
         }
     ]
 }
-'''
-        {
-            "role": "user",
-            "content": """
-            After the code was generated proceed to generate the project structure.
-            Use the files generated to find the names for files and directories.
-            """.strip()
-        },
-            "role": "user",
-            "content": """
-            Generate ONLY ONE Angular 20 component following all the best practices.
-            - You can make up the component's name
-            - You can decide if it has inputs and outputs (if it has them it's better)
-            - It must be a simple calculator.
-            """.strip()
-'''
 
 
 class CustomHandler(BaseCallbackHandler):
     def on_tool_start(self,
                       serialized: dict[str, Any],
                       input_str: str, **kwargs: Any):
-        print(f"Inicio del tool")
-        print(f"Serialized {serialized}")
-        print(f"Input str {input_str}")
+        logger.debug("Tool init")
+        logger.debug(f"Serialized: {serialized}")
+        logger.debug(f"Input str: {input_str}")
 
     def on_tool_end(self, output: Any, **kwargs: Any):
-        print(f"Resultado")
-        print(output)
+        logger.debug("Tool end")
+        logger.debug(f"Output: {output}")
 
 
 for chunk in supervisor.stream(message, {"configurable": {"thread_id": "1"}, "recursion_limit": 50, "callbacks": [CustomHandler()]}):
@@ -106,7 +90,6 @@ for chunk in supervisor.stream(message, {"configurable": {"thread_id": "1"}, "re
         supervisor_messages = chunk.get('supervisor', {}).get('messages', [])
 
         for message in supervisor_messages:
-            # pass
-            print("Message")
-            print("---" * 80)
-            print(message.content)
+            logger.debug("Message")
+            logger.debug("---" * 50)
+            logger.debug(message.content)
